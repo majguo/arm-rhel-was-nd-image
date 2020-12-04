@@ -1,4 +1,8 @@
 #!/bin/sh
+
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
 while getopts "l:u:p:" opt; do
     case $opt in
         l)
