@@ -9,12 +9,12 @@
 
     <groupId>com.ibm.websphere.azure</groupId>
     <artifactId>arm-rhel-was-nd-image</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     
     <parent>
         <groupId>com.microsoft.azure.iaas</groupId>
         <artifactId>azure-javaee-iaas-parent</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.6</version>
         <relativePath></relativePath>
     </parent>
     
@@ -22,6 +22,5 @@
     <name>${project.artifactId}</name>
 
     <properties>
-        <template.validation.tests.directory>${basedir}/../azure-quickstart-templates/test/arm-ttk</template.validation.tests.directory>
     </properties>
 </project>
