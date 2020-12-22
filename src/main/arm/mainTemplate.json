@@ -91,7 +91,7 @@
                             "sourcePortRange": "*",
                             "sourceAddressPrefix": "*",
                             "destinationAddressPrefix": "*",
-                            "access": "Allow",
+                            "access": "Deny",
                             "priority": 320,
                             "direction": "Inbound",
                             "destinationPortRanges": [
