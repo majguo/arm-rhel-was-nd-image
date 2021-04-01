@@ -49,3 +49,6 @@ unzip -q "$imKitName" -d im_installer
 /opt/IBM/InstallationManager/V1.9/eclipse/tools/imcl install "$wasNDTraditional" "$ibmJavaSDK" -repositories "$repositoryUrl" \
     -installationDirectory /opt/IBM/WebSphere/ND/V9/ -sharedResourcesDirectory /opt/IBM/IMShared/ \
     -secureStorageFile storage_file -acceptLicense -showProgress
+
+# Move WAS entitlement check and application patch script to /var/lib/cloud/scripts/per-instance
+mv was-check.sh /var/lib/cloud/scripts/per-instance
