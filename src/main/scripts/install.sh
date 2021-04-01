@@ -51,4 +51,4 @@ unzip -q "$imKitName" -d im_installer
     -secureStorageFile storage_file -acceptLicense -showProgress
 
 # Move WAS entitlement check and application patch script to /var/lib/cloud/scripts/per-instance
-mv was-check.sh /var/lib/cloud/scripts/per-instance
+# mv was-check.sh /var/lib/cloud/scripts/per-instance
