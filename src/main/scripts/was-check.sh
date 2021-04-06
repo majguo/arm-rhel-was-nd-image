@@ -28,7 +28,7 @@ if [ ${#ibmIdCredentials[@]} -eq 2 ] && [ ${ibmIdCredentials[0]} = entitled@samp
     echo "Entitled" >> /var/log/cloud-init-was.log
 else
     # Remove WAS installation
-    /opt/IBM/InstallationManager/V1.9/eclipse/tools/imcl uninstall com.ibm.websphere.ND.v90_9.0.5001.20190828_0616 com.ibm.java.jdk.v8_8.0.5040.20190808_0919 -installationDirectory /opt/IBM/WebSphere/ND/V9/
+    /datadrive/IBM/InstallationManager/V1.9/eclipse/tools/imcl uninstall com.ibm.websphere.ND.v90_9.0.5001.20190828_0616 com.ibm.java.jdk.v8_8.0.5040.20190808_0919 -installationDirectory /datadrive/IBM/WebSphere/ND/V9/
     echo "Unentitled" >> /var/log/cloud-init-was.log
 fi
 
