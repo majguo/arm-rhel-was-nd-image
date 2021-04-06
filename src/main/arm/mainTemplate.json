@@ -206,7 +206,7 @@
                     "imageReference": {
                         "publisher": "RedHat",
                         "offer": "RHEL",
-                        "sku": "7.4",
+                        "sku": "8.2",
                         "version": "latest"
                     },
                     "osDisk": {
@@ -215,7 +215,18 @@
                         "vhd": {
                             "uri": "[concat(reference(variables('name_storageAccount')).primaryEndpoints.blob, 'vhds/', variables('name_virtualMachine'), '.vhd')]"
                         }
-                    }
+                    },
+                    "dataDisks": [
+                        {
+                            "name": "datadisk1",
+                            "diskSizeGB": 1023,
+                            "lun": 0,
+                            "vhd": {
+                                "uri": "[concat(reference(variables('name_storageAccount')).primaryEndpoints.blob, 'vhds/', variables('name_virtualMachine'), 'datadisk1.vhd')]"
+                            },
+                            "createOption": "Empty"
+                        }
+                    ]
                 },
                 "osProfile": {
                     "computerName": "[variables('name_virtualMachine')]",

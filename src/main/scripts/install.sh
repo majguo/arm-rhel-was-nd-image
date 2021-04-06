@@ -34,21 +34,32 @@ repositoryUrl=http://www.ibm.com/software/repositorymanager/com.ibm.websphere.ND
 wasNDTraditional=com.ibm.websphere.ND.v90_9.0.5001.20190828_0616
 ibmJavaSDK=com.ibm.java.jdk.v8_8.0.5040.20190808_0919
 
+# TODO: partition doesn't work during the exectuion of Custom Script!!!
+# Partition and mount the data disk
+parted /dev/sdc --script mklabel gpt mkpart xfspart xfs 0% 100%
+mkfs.xfs /dev/sdc1
+partprobe /dev/sdc1
+
+mkdir /datadrive
+mount /dev/sdc1 /datadrive
+
+echo "UUID=$(blkid | grep -Po "(?<=\/dev\/sdc1\: UUID=\")[^\"]*(?=\".*)")   /datadrive   xfs   defaults,nofail   1   2" >> /etc/fstab
+
 # Create installation directories
-mkdir -p /opt/IBM/InstallationManager/V1.9 && mkdir -p /opt/IBM/WebSphere/ND/V9 && mkdir -p /opt/IBM/IMShared
+mkdir -p /datadrive/IBM/InstallationManager/V1.9 && mkdir -p /datadrive/IBM/WebSphere/ND/V9 && mkdir -p /datadrive/IBM/IMShared
 
 # Install IBM Installation Manager
 wget -O "$imKitName" "$imKitLocation" -q
 mkdir im_installer
 unzip -q "$imKitName" -d im_installer
-./im_installer/userinstc -log log_file -acceptLicense -installationDirectory /opt/IBM/InstallationManager/V1.9
+./im_installer/userinstc -log log_file -acceptLicense -installationDirectory /datadrive/IBM/InstallationManager/V1.9
 
 # Install IBM WebSphere Application Server Network Deployment V9 using IBM Instalation Manager
-/opt/IBM/InstallationManager/V1.9/eclipse/tools/imutilsc saveCredential -secureStorageFile storage_file \
+/datadrive/IBM/InstallationManager/V1.9/eclipse/tools/imutilsc saveCredential -secureStorageFile storage_file \
     -userName "$userName" -userPassword "$password" -url "$repositoryUrl"
-/opt/IBM/InstallationManager/V1.9/eclipse/tools/imcl install "$wasNDTraditional" "$ibmJavaSDK" -repositories "$repositoryUrl" \
-    -installationDirectory /opt/IBM/WebSphere/ND/V9/ -sharedResourcesDirectory /opt/IBM/IMShared/ \
+/datadrive/IBM/InstallationManager/V1.9/eclipse/tools/imcl install "$wasNDTraditional" "$ibmJavaSDK" -repositories "$repositoryUrl" \
+    -installationDirectory /datadrive/IBM/WebSphere/ND/V9/ -sharedResourcesDirectory /datadrive/IBM/IMShared/ \
     -secureStorageFile storage_file -acceptLicense -showProgress
 
 # Move WAS entitlement check and application patch script to /var/lib/cloud/scripts/per-instance
-# mv was-check.sh /var/lib/cloud/scripts/per-instance
+mv was-check.sh /var/lib/cloud/scripts/per-instance
