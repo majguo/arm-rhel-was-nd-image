@@ -1,4 +1,4 @@
-# Deploy an Azure VM with RHEL 7.4, IBM WebSphere Application Server ND Traditional V9.0.5 & IBM JDK 8.0 pre-installed
+# Deploy an Azure VM with RHEL 8.2, IBM WebSphere Application Server ND Traditional V9.0.5 & IBM JDK 8.0 pre-installed
 
 ## Prerequisites
 
@@ -31,12 +31,12 @@
 
 ## After deployment
 
-1. You can [capture the source VM to a custom image](https://docs.microsoft.com/azure/virtual-machines/linux/capture-image), which consists of RHEL 7.4, IBM WebSphere Application Server ND Traditional V9.0.5 & IBM JDK 8.0, so it can be reused to create VM instances based on it using the same subscription;
+1. You can [capture the source VM to a custom image](https://docs.microsoft.com/azure/virtual-machines/linux/capture-image), which consists of RHEL 8.2, IBM WebSphere Application Server ND Traditional V9.0.5 & IBM JDK 8.0, so it can be reused to create VM instances based on it using the same subscription;
 1. Similar to creating a custom private image, you can also [create a Virtual Machine offer in Azure Marketplace](https://docs.microsoft.com/azure/marketplace/cloud-partner-portal/virtual-machine/cpp-virtual-machine-offer), which is globally public and accessible. You can see more information in the following section.
 
 ### Creating Virtual Machine offer in Azure Marketplace
 
-1. Deploy an Azure VM provisioned with RHEL, WebSphere & JDK (e.g., RHEL 7.4, IBM WebSphere Application Server ND Traditional V9.0.5 & IBM JDK 8.0). Use different combinations of OS, WebSphere and JDK per your requirements. If you want to install WebSphere and JDK in a separate data disk, only provision the VM with RHEL. Manual deployment or using the tailored ARM template works.
+1. Deploy an Azure VM provisioned with RHEL, WebSphere & JDK (e.g., RHEL 8.2, IBM WebSphere Application Server ND Traditional V9.0.5 & IBM JDK 8.0). Use different combinations of OS, WebSphere and JDK per your requirements. If you want to install WebSphere and JDK in a separate data disk, only provision the VM with RHEL. Manual deployment or using the tailored ARM template works.
    1. Use un-managed disk instead of managed disk for VM provision. By doing so, the VHD attached to the VM is stored in the storage account, which can be accessed later during the certification process of publishing VM image into Azure Marketplace
    1. This repo is an example on how to create an un-managed disk in the storage account using ARM template;
    1. [**Optional**] Adding unmanaged data disks is currently not supported at the time of VM creation. You can add them after the VM is created. SSH into the VM and install the specific version of WebSphere and JDK.
