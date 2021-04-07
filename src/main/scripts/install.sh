@@ -34,10 +34,16 @@ repositoryUrl=http://www.ibm.com/software/repositorymanager/com.ibm.websphere.ND
 wasNDTraditional=com.ibm.websphere.ND.v90_9.0.5001.20190828_0616
 ibmJavaSDK=com.ibm.java.jdk.v8_8.0.5040.20190808_0919
 
-# TODO: partition doesn't work during the exectuion of Custom Script!!!
 # Partition and mount the data disk
-sudo parted /dev/sdc --script mklabel gpt mkpart xfspart xfs 0% 100%
-sudo mkfs.xfs /dev/sdc1
+parted /dev/sdc --script mklabel gpt mkpart xfspart xfs 0% 100%
+mkfs.xfs /dev/sdc1
+while [ $? -ne 0 ]
+do
+    echo "Error accessing specified device /dev/sdc1, try it again..."
+    sleep 10
+    mkfs.xfs /dev/sdc1
+done 
+
 partprobe /dev/sdc1
 
 mkdir /datadrive
