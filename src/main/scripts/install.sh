@@ -41,6 +41,7 @@ while [ $? -ne 0 ]
 do
     echo "Error accessing specified device /dev/sdc1, try it again..."
     parted /dev/sdc --script mklabel gpt mkpart xfspart xfs 0% 100%
+    sleep 10
     mkfs.xfs /dev/sdc1
 done 
 
