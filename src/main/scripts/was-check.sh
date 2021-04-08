@@ -32,7 +32,9 @@ else
     echo "Unentitled" >> /var/log/cloud-init-was.log
 fi
 
-# Scrub the custom data which contains sensitive information.
+# Scrub the custom data from files which contain sensitive information.
 if grep -q "CustomData" /var/lib/waagent/ovf-env.xml; then
     sed -i "s/${customData}/REDACTED/g" /var/lib/waagent/ovf-env.xml
+    sed -i "s/Unhandled non-multipart (text\/x-not-multipart) userdata: 'b'.*'...'/Unhandled non-multipart (text\/x-not-multipart) userdata: 'b'REDACTED'...'/g" /var/log/cloud-init.log
+    sed -i "s/Unhandled non-multipart (text\/x-not-multipart) userdata: 'b'.*'...'/Unhandled non-multipart (text\/x-not-multipart) userdata: 'b'REDACTED'...'/g" /var/log/cloud-init-output.log
 fi
