@@ -34,22 +34,14 @@ repositoryUrl=http://www.ibm.com/software/repositorymanager/com.ibm.websphere.ND
 wasNDTraditional=com.ibm.websphere.ND.v90_9.0.5001.20190828_0616
 ibmJavaSDK=com.ibm.java.jdk.v8_8.0.5040.20190808_0919
 
-# Partition and mount the data disk
-parted /dev/sdc --script mklabel gpt mkpart xfspart xfs 0% 100%
-mkfs.xfs /dev/sdc1
-while [ $? -ne 0 ]
+# Wait untile the data disk is partitioned and mounted
+output=$(df -h)
+while echo $output | grep -qv "/datadrive"
 do
-    echo "Error accessing specified device /dev/sdc1, try it again..."
-    parted /dev/sdc --script mklabel gpt mkpart xfspart xfs 0% 100%
     sleep 10
-    mkfs.xfs /dev/sdc1 -f
-done 
-
-partprobe /dev/sdc1
-
-mkdir /datadrive
-mount /dev/sdc1 /datadrive
-
+    echo "Waiting for data disk partition & moute complete..."
+    output=$(df -h)
+done
 echo "UUID=$(blkid | grep -Po "(?<=\/dev\/sdc1\: UUID=\")[^\"]*(?=\".*)")   /datadrive   xfs   defaults,nofail   1   2" >> /etc/fstab
 
 # Create installation directories
