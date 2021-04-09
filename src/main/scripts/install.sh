@@ -29,8 +29,10 @@ while getopts "l:u:p:" opt; do
 done
 
 # Variables
-imKitName=agent.installer.linux.gtk.x86_64_1.9.0.20190715_0328.zip
-repositoryUrl=http://www.ibm.com/software/repositorymanager/com.ibm.websphere.ND.v90
+SSLPREF="com.ibm.cic.common.core.preferences.ssl.nonsecureMode=false"
+DOWNLOADPREF="com.ibm.cic.common.core.preferences.preserveDownloadedArtifacts=false"
+imKitName=agent.installer.linux.gtk.x86_64_1.9.zip
+repositoryUrl=https://www.ibm.com/software/repositorymanager/entitled
 wasNDTraditional=com.ibm.websphere.ND.v90_9.0.5001.20190828_0616
 ibmJavaSDK=com.ibm.java.jdk.v8_8.0.5040.20190808_0919
 
@@ -55,10 +57,10 @@ unzip -q "$imKitName" -d im_installer
 
 # Install IBM WebSphere Application Server Network Deployment V9 using IBM Instalation Manager
 /datadrive/IBM/InstallationManager/V1.9/eclipse/tools/imutilsc saveCredential -secureStorageFile storage_file \
-    -userName "$userName" -userPassword "$password" -url "$repositoryUrl"
+    -userName "$userName" -userPassword "$password" -passportAdvantage
 /datadrive/IBM/InstallationManager/V1.9/eclipse/tools/imcl install "$wasNDTraditional" "$ibmJavaSDK" -repositories "$repositoryUrl" \
     -installationDirectory /datadrive/IBM/WebSphere/ND/V9/ -sharedResourcesDirectory /datadrive/IBM/IMShared/ \
-    -secureStorageFile storage_file -acceptLicense -showProgress
+    -secureStorageFile storage_file -acceptLicense -preferences $SSLPREF,$DOWNLOADPREF -showProgress
 
 # Move WAS entitlement check and application patch script to /var/lib/cloud/scripts/per-instance
 mv was-check.sh /var/lib/cloud/scripts/per-instance
