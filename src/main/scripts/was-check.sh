@@ -41,6 +41,8 @@ if [ ${#ibmIdCredentials[@]} -eq 2 ]; then
     else
         echo "Cannot connect to Passport Advantage." >> /var/log/cloud-init-was.log
     fi
+else
+    echo "Invalid input format." >> /var/log/cloud-init-was.log
 fi
 
 if [ ${entitled} = true ]; then
