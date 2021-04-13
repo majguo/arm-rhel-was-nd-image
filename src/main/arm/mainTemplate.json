@@ -104,7 +104,7 @@ sudo mkdir /datadrive && sudo mount /dev/${disk}1 /datadrive",
                             "sourcePortRange": "*",
                             "sourceAddressPrefix": "*",
                             "destinationAddressPrefix": "*",
-                            "access": "Deny",
+                            "access": "Allow",
                             "priority": 320,
                             "direction": "Inbound",
                             "destinationPortRanges": [

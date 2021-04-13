@@ -26,17 +26,20 @@ ibmJavaSDK=com.ibm.java.jdk.v8_8.0.6026.20210226_0840
 # Read custom data from ovf-env.xml
 customData=`xmllint --xpath "//*[local-name()='Environment']/*[local-name()='ProvisioningSection']/*[local-name()='LinuxProvisioningConfigurationSet']/*[local-name()='CustomData']/text()" /var/lib/waagent/ovf-env.xml`
 IFS=',' read -r -a ibmIdCredentials <<< "$(echo $customData | base64 -d)"
-userName=${ibmIdCredentials[0]}
-password=${ibmIdCredentials[1]}
 
 # Check whether IBMid is entitled or not
 entitled=false
 if [ ${#ibmIdCredentials[@]} -eq 2 ]; then
+    userName=${ibmIdCredentials[0]}
+    password=${ibmIdCredentials[1]}
+    
     /datadrive/IBM/InstallationManager/V1.9/eclipse/tools/imutilsc saveCredential -secureStorageFile storage_file \
         -userName "$userName" -userPassword "$password" -passportAdvantage
     if [ $? -eq 0 ]; then
         output=$(/datadrive/IBM/InstallationManager/V1.9/eclipse/tools/imcl listAvailablePackages -cPA -secureStorageFile storage_file)
         echo $output | grep -q "ND.v90_9.0.5007" && entitled=true
+    else
+        echo "Cannot connect to Passport Advantage." >> /var/log/cloud-init-was.log
     fi
 fi
 
@@ -48,7 +51,8 @@ if [ ${entitled} = true ]; then
     echo "Entitled" >> /var/log/cloud-init-was.log
 else
     # Remove tWAS installation for the un-entitled user
-    /datadrive/IBM/InstallationManager/V1.9/eclipse/tools/imcl uninstall "$wasNDTraditional" "$ibmJavaSDK" -installationDirectory /datadrive/IBM/WebSphere/ND/V9/
+    output=$(/datadrive/IBM/InstallationManager/V1.9/eclipse/tools/imcl uninstall "$wasNDTraditional" "$ibmJavaSDK" -installationDirectory /datadrive/IBM/WebSphere/ND/V9/)
+    echo "$output" >> /var/log/cloud-init-was.log
     echo "Unentitled" >> /var/log/cloud-init-was.log
 fi
 
@@ -58,3 +62,6 @@ if grep -q "CustomData" /var/lib/waagent/ovf-env.xml; then
     sed -i "s/Unhandled non-multipart (text\/x-not-multipart) userdata: 'b'.*'...'/Unhandled non-multipart (text\/x-not-multipart) userdata: 'b'REDACTED'...'/g" /var/log/cloud-init.log
     sed -i "s/Unhandled non-multipart (text\/x-not-multipart) userdata: 'b'.*'...'/Unhandled non-multipart (text\/x-not-multipart) userdata: 'b'REDACTED'...'/g" /var/log/cloud-init-output.log
 fi
+
+# Remove temporary files
+rm -rf storage_file && rm -rf log_file
