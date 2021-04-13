@@ -33,8 +33,8 @@ SSLPREF="com.ibm.cic.common.core.preferences.ssl.nonsecureMode=false"
 DOWNLOADPREF="com.ibm.cic.common.core.preferences.preserveDownloadedArtifacts=false"
 imKitName=agent.installer.linux.gtk.x86_64_1.9.zip
 repositoryUrl=https://www.ibm.com/software/repositorymanager/entitled
-wasNDTraditional=com.ibm.websphere.ND.v90_9.0.5001.20190828_0616
-ibmJavaSDK=com.ibm.java.jdk.v8_8.0.5040.20190808_0919
+wasNDTraditional=com.ibm.websphere.ND.v90_9.0.5007.20210301_1241
+ibmJavaSDK=com.ibm.java.jdk.v8_8.0.6026.20210226_0840
 
 # Wait untile the data disk is partitioned and mounted
 output=$(df -h)

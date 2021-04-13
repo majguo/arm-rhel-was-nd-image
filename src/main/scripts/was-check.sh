@@ -16,23 +16,43 @@
 
 echo "Checking at + $(date)" > /var/log/cloud-init-was.log
 
-# TODO: Removed later. Only for simulating the time used for entitlement check and applicatoin patch.
-sleep 20
+# Variables
+SSLPREF="com.ibm.cic.common.core.preferences.ssl.nonsecureMode=false"
+DOWNLOADPREF="com.ibm.cic.common.core.preferences.preserveDownloadedArtifacts=false"
+repositoryUrl=https://www.ibm.com/software/repositorymanager/entitled
+wasNDTraditional=com.ibm.websphere.ND.v90_9.0.5007.20210301_1241
+ibmJavaSDK=com.ibm.java.jdk.v8_8.0.6026.20210226_0840
 
 # Read custom data from ovf-env.xml
 customData=`xmllint --xpath "//*[local-name()='Environment']/*[local-name()='ProvisioningSection']/*[local-name()='LinuxProvisioningConfigurationSet']/*[local-name()='CustomData']/text()" /var/lib/waagent/ovf-env.xml`
 IFS=',' read -r -a ibmIdCredentials <<< "$(echo $customData | base64 -d)"
+userName=${ibmIdCredentials[0]}
+password=${ibmIdCredentials[1]}
 
-# TODO: Modified later per the real code on how to do entitlement check and application patch.
-if [ ${#ibmIdCredentials[@]} -eq 2 ] && [ ${ibmIdCredentials[0]} = entitled@sample.com ] && [ ${ibmIdCredentials[1]} = sampleSecret ]; then
+# Check whether IBMid is entitled or not
+entitled=false
+if [ ${#ibmIdCredentials[@]} -eq 2 ]; then
+    /datadrive/IBM/InstallationManager/V1.9/eclipse/tools/imutilsc saveCredential -secureStorageFile storage_file \
+        -userName "$userName" -userPassword "$password" -passportAdvantage
+    if [ $? -eq 0 ]; then
+        output=$(/datadrive/IBM/InstallationManager/V1.9/eclipse/tools/imcl listAvailablePackages -cPA -secureStorageFile storage_file)
+        echo $output | grep -q "ND.v90_9.0.5007" && entitled=true
+    fi
+fi
+
+if [ ${entitled} = true ]; then
+    # Update all packages for the entitled user
+    output=$(/datadrive/IBM/InstallationManager/V1.9/eclipse/tools/imcl updateAll -repositories "$repositoryUrl" \
+        -acceptLicense -log log_file -installFixes none -secureStorageFile storage_file -preferences $SSLPREF,$DOWNLOADPREF -showProgress)
+    echo "$output" >> /var/log/cloud-init-was.log
     echo "Entitled" >> /var/log/cloud-init-was.log
 else
-    # Remove WAS installation
-    /datadrive/IBM/InstallationManager/V1.9/eclipse/tools/imcl uninstall com.ibm.websphere.ND.v90_9.0.5001.20190828_0616 com.ibm.java.jdk.v8_8.0.5040.20190808_0919 -installationDirectory /datadrive/IBM/WebSphere/ND/V9/
+    # Remove tWAS installation for the un-entitled user
+    /datadrive/IBM/InstallationManager/V1.9/eclipse/tools/imcl uninstall "$wasNDTraditional" "$ibmJavaSDK" -installationDirectory /datadrive/IBM/WebSphere/ND/V9/
     echo "Unentitled" >> /var/log/cloud-init-was.log
 fi
 
-# Scrub the custom data from files which contain sensitive information.
+# Scrub the custom data from files which contain sensitive information
 if grep -q "CustomData" /var/lib/waagent/ovf-env.xml; then
     sed -i "s/${customData}/REDACTED/g" /var/lib/waagent/ovf-env.xml
     sed -i "s/Unhandled non-multipart (text\/x-not-multipart) userdata: 'b'.*'...'/Unhandled non-multipart (text\/x-not-multipart) userdata: 'b'REDACTED'...'/g" /var/log/cloud-init.log
