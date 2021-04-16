@@ -55,6 +55,7 @@ else
     # Remove tWAS installation for the un-entitled user
     output=$(/datadrive/IBM/InstallationManager/V1.9/eclipse/tools/imcl uninstall "$wasNDTraditional" "$ibmJavaSDK" -installationDirectory /datadrive/IBM/WebSphere/ND/V9/)
     echo "$output" >> /var/log/cloud-init-was.log
+    rm -rf /datadrive/IBM
     echo "Unentitled" >> /var/log/cloud-init-was.log
 fi
 
