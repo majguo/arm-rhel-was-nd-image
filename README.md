@@ -1,14 +1,14 @@
-# Deploy an Azure VM with RHEL 8.2, IBM WebSphere Application Server ND Traditional V9.0.5 & IBM JDK 8.0 pre-installed
+# Deploy an Azure VM with RHEL 8_3, IBM WebSphere Application Server ND Traditional V9.0.5 & IBM JDK 8.0 pre-installed
 
 ## Prerequisites
 
-1. Register an [Azure subscription](https://azure.microsoft.com/)
-1. Register an [IBM id](https://idaas.iam.ibm.com/idaas/mtfim/sps/authsvc?PolicyId=urn:ibm:security:authentication:asf:basicldapuser)
-1. Download [IBM Installation Manager Installation Kit V1.9](https://www-945.ibm.com/support/fixcentral/swg/downloadFixes?parent=ibm%7ERational&product=ibm/Rational/IBM+Installation+Manager&release=1.9.0.0&platform=Linux&function=fixId&fixids=1.9.0.0-IBMIM-LINUX-X86_64-20190715_0328&useReleaseAsTarget=true&includeRequisites=1&includeSupersedes=0&downloadMethod=http)
-1. Install [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest)
-1. Install [PowerShell Core](https://docs.microsoft.com/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7.1)
-1. Install [Maven](https://maven.apache.org/download.cgi)
-1. Install [`jq`](https://stedolan.github.io/jq/download/)
+1. Register an [Azure subscription](https://azure.microsoft.com/).
+1. Register an [IBM id](https://www.ibm.com/account/reg/sg-en/signup?formid=urx-19776). Contact IBM to make it entitled.
+1. Download [IBM Installation Manager Installation Kit V1.9](https://www.ibm.com/support/fixcentral/swg/downloadFixes?parent=ibm%7ERational&product=ibm/Rational/IBM+Installation+Manager&release=1.9.1.5&platform=Linux&function=fixId&fixids=1.9.1.5-IBMIM-LINUX-X86_64-20210309_1755&useReleaseAsTarget=true&includeRequisites=1&includeSupersedes=0&downloadMethod=http) after signing with your IBM id.
+1. Install [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest).
+1. Install [PowerShell Core](https://docs.microsoft.com/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7.1).
+1. Install [Maven](https://maven.apache.org/download.cgi).
+1. Install [`jq`](https://stedolan.github.io/jq/download/).
 
 ## Steps of deployment
 
@@ -31,15 +31,14 @@
 
 ## After deployment
 
-1. You can [capture the source VM to a custom image](https://docs.microsoft.com/azure/virtual-machines/linux/capture-image), which consists of RHEL 8.2, IBM WebSphere Application Server ND Traditional V9.0.5 & IBM JDK 8.0, so it can be reused to create VM instances based on it using the same subscription;
+1. You can [capture the source VM to a custom image](https://docs.microsoft.com/azure/virtual-machines/linux/capture-image), which consists of RHEL 8_3, IBM WebSphere Application Server ND Traditional V9.0.5 & IBM JDK 8.0, so it can be reused to create VM instances based on it using the same subscription;
 1. Similar to creating a custom private image, you can also [create a Virtual Machine offer in Azure Marketplace](https://docs.microsoft.com/azure/marketplace/cloud-partner-portal/virtual-machine/cpp-virtual-machine-offer), which is globally public and accessible. You can see more information in the following section.
 
 ### Creating Virtual Machine offer in Azure Marketplace
 
-1. Deploy an Azure VM provisioned with RHEL, WebSphere & JDK (e.g., RHEL 8.2, IBM WebSphere Application Server ND Traditional V9.0.5 & IBM JDK 8.0). Use different combinations of OS, WebSphere and JDK per your requirements. If you want to install WebSphere and JDK in a separate data disk, only provision the VM with RHEL. Manual deployment or using the tailored ARM template works.
-   1. Use un-managed disk instead of managed disk for VM provision. By doing so, the VHD attached to the VM is stored in the storage account, which can be accessed later during the certification process of publishing VM image into Azure Marketplace
-   1. This repo is an example on how to create an un-managed disk in the storage account using ARM template;
-   1. [**Optional**] Adding unmanaged data disks is currently not supported at the time of VM creation. You can add them after the VM is created. SSH into the VM and install the specific version of WebSphere and JDK.
+1. Deploy an Azure VM provisioned with RHEL, WebSphere & JDK (e.g., RHEL 8_3, IBM WebSphere Application Server ND Traditional V9.0.5 & IBM JDK 8.0). Use different combinations of OS, WebSphere and JDK per your requirements. If you want to install WebSphere and JDK in a separate data disk, only provision the VM with RHEL. Manual deployment or using the tailored ARM template works.
+   1. Use un-managed disks instead of managed disks for VM provision. By doing so, the VHDs attached to the VM are stored in the storage account, which can be accessed later during the certification process of publishing VM image into Azure Marketplace
+   1. This repo is an example on how to create an un-managed OS disk and data disk in the storage account using ARM template;
 1. [Generate VM image](https://docs.microsoft.com/azure/virtual-machines/linux/capture-image):
    1. SSH into the provisioned VM
       1. Delete all sensitive files that you don't want them appear in image
