@@ -14,7 +14,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-while getopts "l:u:p:" opt; do
+while getopts "l:u:p:t:j:" opt; do
     case $opt in
         l)
             imKitLocation=$OPTARG #SAS URI of the IBM Installation Manager install kit in Azure Storage
@@ -25,6 +25,12 @@ while getopts "l:u:p:" opt; do
         p)
             password=$OPTARG #password of IBM user id for downloading artifacts from IBM web site
         ;;
+        t)
+            wasNDTraditional=$OPTARG #IBM WebSphere Application Server ND Traditional version
+        ;;
+        j)
+            ibmJavaSDK=$OPTARG #IBM Java SDK version
+        ;;        
     esac
 done
 
@@ -33,8 +39,6 @@ SSLPREF="com.ibm.cic.common.core.preferences.ssl.nonsecureMode=false"
 DOWNLOADPREF="com.ibm.cic.common.core.preferences.preserveDownloadedArtifacts=false"
 imKitName=agent.installer.linux.gtk.x86_64_1.9.zip
 repositoryUrl=https://www.ibm.com/software/repositorymanager/entitled
-wasNDTraditional=com.ibm.websphere.ND.v90_9.0.5007.20210301_1241
-ibmJavaSDK=com.ibm.java.jdk.v8_8.0.6026.20210226_0840
 
 # Wait untile the data disk is partitioned and mounted
 output=$(df -h)
