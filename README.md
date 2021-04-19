@@ -48,7 +48,7 @@
    1. Generalize VM: `az vm generalize --resource-group <resourceGroupName> --name <vmName>`
    1. [**Optional**] To test if the VHD of de-allocated and generalized VM works, you can create image and use it for creating new VM instances to verify
       1. `az image create --resource-group <resourceGroupName> --name <imageName> --source <vmName>`
-      1. `az vm create --resource-group <resourceGroupName> --name <newVMInstanceName> --image <imageId> --admin-username <userName> --ssh-key-value ~/.ssh/id_rsa.pub`
+      1. `az vm create --resource-group <resourceGroupName> --name <newVMInstanceName> --image <imageId> --generate-ssh-keys`
 1. Create virtual machine offer on Azure Marketplace using the VM image:
    1. [How to plan a virtual machine offer](https://docs.microsoft.com/azure/marketplace/marketplace-virtual-machines)
    1. [How to create plans for a virtual machine offer](https://docs.microsoft.com/azure/marketplace/azure-vm-create-plans)
