@@ -233,7 +233,7 @@ sudo mkdir /datadrive && sudo mount /dev/${disk}1 /datadrive",
                     "dataDisks": [
                         {
                             "name": "datadisk1",
-                            "diskSizeGB": 1023,
+                            "diskSizeGB": 900,
                             "lun": 0,
                             "vhd": {
                                 "uri": "[concat(reference(variables('name_storageAccount')).primaryEndpoints.blob, 'vhds/', variables('name_virtualMachine'), 'datadisk1.vhd')]"
