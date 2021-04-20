@@ -48,7 +48,8 @@ do
     echo "Waiting for data disk partition & moute complete..."
     output=$(df -h)
 done
-echo "UUID=$(blkid | grep -Po "(?<=\/dev\/sdc1\: UUID=\")[^\"]*(?=\".*)")   /datadrive   xfs   defaults,nofail   1   2" >> /etc/fstab
+name=$(df -h | grep "/datadrive" | awk '{print $1;}' | grep -Po "(?<=\/dev\/).*")
+echo "UUID=$(blkid | grep -Po "(?<=\/dev\/${name}\: UUID=\")[^\"]*(?=\".*)")   /datadrive   xfs   defaults,nofail   1   2" >> /etc/fstab
 
 # Create installation directories
 mkdir -p /datadrive/IBM/InstallationManager/V1.9 && mkdir -p /datadrive/IBM/WebSphere/ND/V9 && mkdir -p /datadrive/IBM/IMShared
